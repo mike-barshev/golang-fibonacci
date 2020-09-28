@@ -1,21 +1,27 @@
 package main
 
+import (
+	"sync"
+)
+
 // fibonacci function
-func fibonacci(n int) int {
-	fn := make(map[int]int)
-	for i := 0; i <= n; i++ {
-		var f int
-		if i <= 2 {
-			f = 1
-		} else {
-			f = fn[i-1] + fn[i-2]
-		}
-		fn[i] = f
-	}
-	return fn[n]
+func fibonacci(x, y *int, wg *sync.WaitGroup) {
+	*y = *x + *y
+	*x = *y - *x
+	defer wg.Done()
 }
 
 func main() {
-	var x = fibonacci(10)
-	println(x)
+	wg := new(sync.WaitGroup)
+	x := new(int)
+	y := new(int)
+	*x = 1
+	*y = 1
+	n := 10 // Число n Фибоначчи
+	for i := 1; i < n; i++ {
+		wg.Add(1)
+		go fibonacci(x, y, wg)
+		wg.Wait()
+	}
+	println(*x)
 }

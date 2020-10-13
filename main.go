@@ -16,7 +16,7 @@ func fib() chan uint64 {
 
 func main() {
 	c := fib()
-	for n := 0; n < 1000; n++ {
+	for n := 0; n < 50; n++ {
 		fmt.Println(<-c)
 	}
 }
